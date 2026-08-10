@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ import {
 connectDB();
 
 const app = express();
+
+app.use(morgan("dev"));
 
 app.use(cors({
   origin: process.env.CLIENT_URL || "http://localhost:5173",
