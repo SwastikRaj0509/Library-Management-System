@@ -53,6 +53,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-client
     if: github.ref == 'refs/heads/main'
+    defaults:
+      run:
+        working-directory: ./client
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
