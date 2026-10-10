@@ -1,21 +1,17 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import API from "../services/api";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: ""
+    email: ""
   });
 
   const handleChange = (e) => {
@@ -33,33 +29,17 @@ const ForgotPassword = () => {
       return;
     }
 
-    if (!formData.password.trim()) {
-      setMessage("Please enter a new password");
-      return;
-    }
-
-    if (formData.password.length < 6) {
-      setMessage("Password must be at least 6 characters");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setMessage("Passwords do not match");
-      return;
-    }
-
     try {
       setLoading(true);
       setMessage("");
 
-      const res = await API.post("/auth/reset-password-direct", {
-        email: formData.email,
-        password: formData.password
+      const res = await API.post("/auth/forgot-password", {
+        email: formData.email
       });
 
       setSuccess(true);
       setMessage(res.data.message || "Password reset successfully!");
-      setFormData({ email: "", password: "", confirmPassword: "" });
+      setFormData({ email: "" });
 
       setTimeout(() => {
         navigate("/login");
@@ -141,7 +121,7 @@ const ForgotPassword = () => {
             Reset Password
           </h1>
           <p className="text-white/60 text-sm">
-            Enter your email and new password
+            Enter your email and we will send you a reset link
           </p>
         </div>
 
@@ -210,142 +190,6 @@ const ForgotPassword = () => {
               </div>
             </div>
 
-            {/* New Password */}
-            <div>
-              <label className="
-                block
-                text-white/80
-                text-sm
-                mb-3
-                font-medium
-              ">
-                New Password
-              </label>
-              <div className="relative">
-                <Lock className="
-                  absolute
-                  left-4
-                  top-1/2
-                  transform
-                  -translate-y-1/2
-                  w-5
-                  h-5
-                  text-cyan-400
-                " />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter new password"
-                  className="
-                    w-full
-                    bg-white/5
-                    border
-                    border-white/10
-                    rounded-lg
-                    py-3
-                    px-4
-                    pl-12
-                    pr-12
-                    text-white
-                    placeholder-white/40
-                    focus:outline-none
-                    focus:border-cyan-400/50
-                    focus:bg-white/10
-                    transition
-                  "
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="
-                    absolute
-                    right-4
-                    top-1/2
-                    transform
-                    -translate-y-1/2
-                    text-white/60
-                    hover:text-white/80
-                  "
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Confirm Password */}
-            <div>
-              <label className="
-                block
-                text-white/80
-                text-sm
-                mb-3
-                font-medium
-              ">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <Lock className="
-                  absolute
-                  left-4
-                  top-1/2
-                  transform
-                  -translate-y-1/2
-                  w-5
-                  h-5
-                  text-cyan-400
-                " />
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Confirm new password"
-                  className="
-                    w-full
-                    bg-white/5
-                    border
-                    border-white/10
-                    rounded-lg
-                    py-3
-                    px-4
-                    pl-12
-                    pr-12
-                    text-white
-                    placeholder-white/40
-                    focus:outline-none
-                    focus:border-cyan-400/50
-                    focus:bg-white/10
-                    transition
-                  "
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="
-                    absolute
-                    right-4
-                    top-1/2
-                    transform
-                    -translate-y-1/2
-                    text-white/60
-                    hover:text-white/80
-                  "
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -367,7 +211,7 @@ const ForgotPassword = () => {
                 disabled:cursor-not-allowed
               "
             >
-              {loading ? "Resetting..." : "Reset Password"}
+              {loading ? "Sending..." : "Send Reset Link"}
             </motion.button>
           </form>
         ) : (

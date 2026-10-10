@@ -5,8 +5,7 @@ import {
    loginUser,
    forgotPassword,
    resetPassword,
-   verifyResetToken,
-   resetPasswordDirect
+   verifyResetToken
 } from "../controllers/authController.js";
 
 import {
@@ -22,8 +21,6 @@ router.post("/login", loginUser);
 router.post("/forgot-password", forgotPassword);
 
 router.post("/reset-password", resetPassword);
-
-router.post("/reset-password-direct", resetPasswordDirect);
 
 router.get("/verify-token/:token", verifyResetToken);
 
