@@ -22,8 +22,6 @@ import {
    errorHandler
 } from "./middlewares/errorMiddleware.js";
 
-connectDB();
-
 const app = express();
 
 app.use(morgan("dev"));
@@ -57,6 +55,17 @@ app.use(notFound);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-   console.log(`Server running on port ${PORT}`);
-});
+const startServer = async () => {
+   try {
+      await connectDB();
+
+      app.listen(PORT, () => {
+         console.log(`Server running on port ${PORT}`);
+      });
+   } catch (error) {
+      console.error(error.message);
+      process.exit(1);
+   }
+};
+
+startServer();
