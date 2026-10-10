@@ -16,6 +16,10 @@ API.interceptors.response.use(
   },
   (error) => {
     console.error(`[Frontend] API Error:`, error);
+    if (error.response?.status === 401) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
     return Promise.reject(error);
   }
 );
