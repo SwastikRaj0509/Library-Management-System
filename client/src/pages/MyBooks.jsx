@@ -9,11 +9,8 @@ const MyBooks = () => {
   const [books, setBooks] = useState([]);
 
   const fetchBorrowedBooks = async () => {
-
     try {
-
       const token = localStorage.getItem("token");
-
       const res = await API.get(
         "/borrow/my-books",
         {
@@ -22,11 +19,8 @@ const MyBooks = () => {
           }
         }
       );
-
       setBooks(res.data);
-
     } catch(error){
-
       console.log(error);
     }
   };
@@ -56,8 +50,24 @@ const MyBooks = () => {
   };
 
   useEffect(() => {
+    const fetchBorrowedBooks = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await API.get(
+          "/borrow/my-books",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+        setBooks(res.data);
+      } catch(error){
+        console.log(error);
+      }
+    };
 
-    fetchBorrowedBooks();
+    void fetchBorrowedBooks();
 
   }, []);
 

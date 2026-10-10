@@ -39,22 +39,25 @@ const Books = () => {
       );
 
   const fetchBooks = async () => {
-
     try {
-
       const res = await API.get("/books");
-
       setBooks(res.data);
-
     } catch(error){
-
       console.log(error);
     }
   };
 
   useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const res = await API.get("/books");
+        setBooks(res.data);
+      } catch(error){
+        console.log(error);
+      }
+    };
 
-    fetchBooks();
+    void fetchBooks();
 
   }, []);
 

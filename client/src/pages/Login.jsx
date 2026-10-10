@@ -19,7 +19,7 @@ const Login = () => {
       navigate("/dashboard");
     }
 
-  }, []);
+  }, [navigate]);
 
   const [formData, setFormData] = useState({
     email: "",

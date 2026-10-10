@@ -9,10 +9,12 @@ const ResetPassword = () => {
   const { token } = useParams();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => Boolean(token));
   const [submitting, setSubmitting] = useState(false);
   const [tokenValid, setTokenValid] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(() =>
+    token ? "" : "No reset token provided."
+  );
   const [success, setSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -27,7 +29,7 @@ const ResetPassword = () => {
         await API.get(`/auth/verify-token/${token}`);
         setTokenValid(true);
         setLoading(false);
-      } catch (error) {
+      } catch {
         setTokenValid(false);
         setMessage("Invalid or expired reset link. Please request a new one.");
         setLoading(false);
@@ -36,9 +38,6 @@ const ResetPassword = () => {
 
     if (token) {
       verifyToken();
-    } else {
-      setLoading(false);
-      setMessage("No reset token provided.");
     }
   }, [token]);
 
